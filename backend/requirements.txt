@@ -2,7 +2,7 @@ asgiref==3.7.2
 boto3==1.20.26
 botocore==1.23.54
 certifi==2023.11.17
-cffi==1.16.0
+cffi
 charset-normalizer==3.3.2
 cryptography==41.0.7
 dj-database-url==2.1.0
