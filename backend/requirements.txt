@@ -19,7 +19,7 @@ environs==10.0.0
 gunicorn==21.2.0
 idna==3.6
 inflection==0.5.1
-jmespath==0.10.0
+jmespath
 marshmallow
 packaging
 psycopg2
