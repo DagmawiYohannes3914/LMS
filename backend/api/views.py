@@ -1,5 +1,6 @@
-import random
 from django.shortcuts import render
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from api import serializers as api_serializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics, status
@@ -7,6 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from userauths.models import User, Profile
+import random
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -45,6 +47,15 @@ class PasswordRestEmailVerifyApiView(generics.RetrieveAPIView):
             # if it does not work change it  &=refresh_token{refresh_token}
             link = f"http://localhost:5173/create-new-password/?otp={user.otp}&uuidb64={uuidb64}&refresh_token={refresh_token}"
 
+            context = {
+                "link": link,
+                "username": user.username
+            }
+
+            subject = "Password Reset Email"
+            text_body = render_to_string("email/password_rest.txt", context)
+            html_body = render_to_string("email/password_rest.html", context)
+
             print("link == ", link)
             # merge =
 
@@ -57,9 +68,9 @@ class PasswordChangeApiView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         otp = request.data['otp']
-        
+
         uuidb64 = request.data['uuidb64']
-        
+
         password = request.data['password']
 
         user = User.objects.get(id=uuidb64, otp=otp)
